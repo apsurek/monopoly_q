@@ -1,0 +1,10 @@
+name = "monopolyq_theory"
+version = "0.1.0"
+defaultTargets = ["monopolyq_theory"]
+
+[[lean_lib]]
+name = "MonopolyqTheory"
+
+[[lean_exe]]
+name = "monopolyq_theory"
+root = "Main"
