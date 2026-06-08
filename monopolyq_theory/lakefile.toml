@@ -1,10 +1,15 @@
 name = "monopolyq_theory"
 version = "0.1.0"
-defaultTargets = ["monopolyq_theory"]
+keywords = ["math", "economics", "monopoly"]
+defaultTargets = ["MonopolyqTheory"]
+
+[leanOptions]
+pp.unicode.fun = true
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.30.0"
 
 [[lean_lib]]
 name = "MonopolyqTheory"
-
-[[lean_exe]]
-name = "monopolyq_theory"
-root = "Main"
