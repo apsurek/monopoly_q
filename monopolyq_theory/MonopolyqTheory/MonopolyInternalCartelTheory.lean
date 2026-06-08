@@ -1,4 +1,5 @@
-import Mathlib
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Mathlib.Tactic
 
 /-!
 # Monopoly Restriction as an Internal Governance Problem
@@ -157,7 +158,6 @@ theorem agencyConstrained_as_weighted_average
       (κ / (2 * b + κ)) * Qd := by
   unfold agencyConstrainedQuantityFromQM
   field_simp [hden]
-  ring
 
 /-- The distance from the textbook monopoly quantity equals a positive weight
 on the distance between `Qd` and `Qm`. -/
@@ -367,8 +367,20 @@ theorem mixedCompensation_no_common_profit
     (α η Qc : ℝ) (hα : α ≠ 0) (hη : η ≠ 0)
     (hden : α * (1 + 1 / η) ≠ 0) :
     mixedCompensationQD α 0 η Qc = localIncentiveQD η Qc := by
+  have hηplus : 1 + η ≠ 0 := by
+    intro h
+    apply hden
+    have hηeq : η = -1 := by linarith
+    subst η
+    norm_num
+  have hαη : α + α * η ≠ 0 := by
+    rw [show α + α * η = α * (1 + η) by ring]
+    exact mul_ne_zero hα hηplus
+  have hηplus' : η + 1 ≠ 0 := by
+    simpa [add_comm] using hηplus
   unfold mixedCompensationQD localIncentiveQD
-  field_simp [hα, hη, hden]
+  field_simp [hα, hη, hden, hηplus, hαη]
+  field_simp [hα, hηplus']
   ring
 
 /-- If compensation has no local incentive component, the mixed formula reduces
@@ -619,8 +631,10 @@ theorem regulatoryGap_alpha_formula
     (b κ α Qc : ℝ) (hden : 2 * b + κ ≠ 0) :
     regulatoryGap Qc (agencyConstrainedQuantityAlpha b κ α Qc) =
       Qc * ((b + κ * (1 - α)) / (2 * b + κ)) := by
+  have hden' : b * 2 + κ ≠ 0 := by
+    simpa [mul_comm] using hden
   unfold regulatoryGap agencyConstrainedQuantityAlpha
-  field_simp [hden]
+  field_simp [hden, hden']
   ring
 
 /-!
